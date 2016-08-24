@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="Master">
+        <menu>
+            <item
+                android:id="@+id/m_pengguna"
+                android:icon="@drawable/admin"
+                android:title="Master Pengguna" />
+            <item
+                android:id="@+id/m_produk"
+                android:icon="@drawable/barang"
+                android:title="Master Produk" />
+        </menu>
+    </item>
+    <item android:title="Pemesanan Produk">
+        <menu>
+            <item
+                android:id="@+id/input_pesan"
+                android:icon="@android:drawable/ic_input_add"
+                android:title="Input Pemesanan produk" />
+            <item
+                android:id="@+id/info_data"
+                android:icon="@android:drawable/ic_dialog_info"
+                android:title="Informasi data penyelesaian pesanan" />
+            <item
+                android:id="@+id/info_bahan"
+                android:icon="@android:drawable/ic_menu_info_details"
+                android:title="Informasi Ketersediaan Bahan" />
+        </menu>
+    </item>
+
+    <item android:title="Pengendalian Produksi">
+        <menu>
+            <item
+                android:id="@+id/nav_share"
+                android:icon="@drawable/buy"
+                android:title="Pembelian bahan" />
+            <item
+                android:id="@+id/nav_send"
+                android:icon="@drawable/trafic"
+                android:title="Penerimaan Bahan Baku" />
+            <item
+                android:id="@+id/guna_bahan"
+                android:icon="@drawable/usage"
+                android:title="Penggunaan Bahan Baku" />
+            <item
+                android:id="@+id/hasil"
+                android:icon="@drawable/sell"
+                android:title="Hasil Produksi Pengrajin" />
+        </menu>
+    </item>
+
+</menu>
