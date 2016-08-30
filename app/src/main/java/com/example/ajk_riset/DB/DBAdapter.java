@@ -61,6 +61,17 @@ public class DBAdapter extends SQLiteOpenHelper {
         cv.put("satuan_grosir", satuan_grosir);
         db.insert("Master_produk", "Master_produk", cv);
     }
+    public void Pesanan(SQLiteDatabase db,String idProduct,String Tanggal,String id_pengguna,String id_produk,String harga_satuan,String jumlah,String total){
+        ContentValues cv = new ContentValues();
+        cv.put("_id", idProduct);
+        cv.put("Tanggal", Tanggal);
+        cv.put("id_pengguna", id_pengguna);
+        cv.put("id_produk", id_produk);
+        cv.put("harga_satuan", harga_satuan);
+        cv.put("jumlah", jumlah);
+        cv.put("total", total);
+        db.insert("pemesanan", "pemesanan", cv);
+    }
 
 
 

@@ -19,6 +19,10 @@
                 android:icon="@android:drawable/ic_input_add"
                 android:title="Input Pemesanan produk" />
             <item
+                android:id="@+id/spk"
+                android:icon="@android:drawable/ic_input_add"
+                android:title="Surat Perintah Pekerjaan" />
+            <item
                 android:id="@+id/info_data"
                 android:icon="@android:drawable/ic_dialog_info"
                 android:title="Informasi data penyelesaian pesanan" />

@@ -36,16 +36,17 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 /**
  * Created by AJK-Riset on 8/18/2016.
  */
-public class InputPesanan extends Activity{
+public class InputPesanan extends Activity {
     DBAdapter adapter;
     SQLiteDatabase database;
     Spinner namaProduk;
-    EditText hargasatuan,jumlahbarang,TotalHarga,CatatanPesanan;
+    EditText hargasatuan, jumlahbarang, TotalHarga, CatatanPesanan;
     SharedPreferences pref;
     Button submit;
     Cursor kursor;
-    public static String id_pengguna,id_produk,harga_satuan,jumlah,total,status,catatan;
+    public static String id_pengguna, id_produk, harga_satuan, jumlah, total, status, catatan;
     public static Bundle bundle;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,18 +95,19 @@ public class InputPesanan extends Activity{
             public void onClick(View v) {
                 pref = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
                 id_pengguna = Pengguna(pref.getString("username", "kosong"));
-            jumlah = jumlahbarang.getText().toString();
+                jumlah = jumlahbarang.getText().toString();
                 harga_satuan = hargasatuan.getText().toString();
-                total=TotalHarga.getText().toString();
-                status="New";
+                total = TotalHarga.getText().toString();
+                status = "New";
                 catatan = CatatanPesanan.getText().toString();
                 new InsertPesanan().execute("");
             }
         });
     }
-    public void addDataBarang(){
 
-        List<String> lis = new  ArrayList<String>();
+    public void addDataBarang() {
+
+        List<String> lis = new ArrayList<String>();
         kursor = database.rawQuery("select nama_produk from Master_produk", null);
         kursor.moveToFirst();
         while (!kursor.isAfterLast()) {
@@ -115,14 +117,15 @@ public class InputPesanan extends Activity{
             lis.add(val);
             kursor.moveToNext();
         }
-        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(InputPesanan.this, android.R.layout.simple_spinner_dropdown_item,lis);
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(InputPesanan.this, android.R.layout.simple_spinner_dropdown_item, lis);
         namaProduk.setAdapter(arrayAdapter);
 
     }
-    public void cariHarga(String nama){
 
-        List<String> lis = new  ArrayList<String>();
-        kursor = database.rawQuery("select harga_satuan from Master_produk where nama_produk='"+nama+"'", null);
+    public void cariHarga(String nama) {
+
+        List<String> lis = new ArrayList<String>();
+        kursor = database.rawQuery("select harga_satuan from Master_produk where nama_produk='" + nama + "'", null);
         kursor.moveToFirst();
         while (!kursor.isAfterLast()) {
             String val = kursor.getString(0);
@@ -132,23 +135,25 @@ public class InputPesanan extends Activity{
         }
 
     }
-    public void cariId(String nama){
 
-        List<String> lis = new  ArrayList<String>();
-        kursor = database.rawQuery("select _id from Master_produk where nama_produk='"+nama+"'", null);
+    public void cariId(String nama) {
+
+        List<String> lis = new ArrayList<String>();
+        kursor = database.rawQuery("select _id from Master_produk where nama_produk='" + nama + "'", null);
         kursor.moveToFirst();
         while (!kursor.isAfterLast()) {
             String val = kursor.getString(0);
             Log.e("adapter", "Lokasi " + val);
-           id_produk = val;
+            id_produk = val;
             kursor.moveToNext();
         }
 
     }
-    public String Pengguna(String nama){
-        kursor = database.rawQuery("select _id from Master_pengguna where username='"+nama+"'", null);
+
+    public String Pengguna(String nama) {
+        kursor = database.rawQuery("select _id from Master_pengguna where username='" + nama + "'", null);
         kursor.moveToFirst();
-        String id="";
+        String id = "";
         while (!kursor.isAfterLast()) {
             id = kursor.getString(0);
             Log.e("adapter", "Lokasi " + id);
@@ -164,7 +169,7 @@ public class InputPesanan extends Activity{
         HttpPost httppost = new HttpPost("http://10.10.1.8/manop/insert_pesanan.php");
         //		HttpPost httppost = new HttpPost("http://192.168.137.1/AppsaniApp_new/update.php");
         private ProgressDialog Dialog = new ProgressDialog(InputPesanan.this);
-        String jumlah,status,useroid;
+        String jumlah, status, useroid;
 
 
         protected void onPreExecute() {
@@ -187,7 +192,7 @@ public class InputPesanan extends Activity{
                 nameValuePairs.add(new BasicNameValuePair("id_produk", InputPesanan.id_produk));
                 nameValuePairs.add(new BasicNameValuePair("harga_satuan", InputPesanan.harga_satuan));
                 nameValuePairs.add(new BasicNameValuePair("jumlah", InputPesanan.jumlah));
-                nameValuePairs.add(new BasicNameValuePair("total_harga",InputPesanan.total));
+                nameValuePairs.add(new BasicNameValuePair("total_harga", InputPesanan.total));
                 // nameValuePairs.add(new BasicNameValuePair("user",
                 // "jullev"));
                 nameValuePairs.add(new BasicNameValuePair("status",
@@ -199,7 +204,6 @@ public class InputPesanan extends Activity{
                 HttpResponse response = httpclient.execute(httppost);
                 Log.v("Post Status", "Code: "
                         + response.getStatusLine().getReasonPhrase());
-
 
 
             } catch (ClientProtocolException e) {

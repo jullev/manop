@@ -118,6 +118,10 @@ public class MainActivity extends AppCompatActivity
             Intent intent = new Intent(this,MasterProduk.class);
             startActivity(intent);
         }
+        else if (id == R.id.spk) {
+            Intent intent = new Intent(this,SuratPerintahKerja.class);
+            startActivity(intent);
+        }
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);

@@ -62,5 +62,10 @@
         android:layout_height="wrap_content"
         android:text="Submit"
         android:id="@+id/button5" />
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Ambil data"
+        android:id="@+id/button6" />
 
 </LinearLayout>
