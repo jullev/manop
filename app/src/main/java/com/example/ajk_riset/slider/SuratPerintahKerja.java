@@ -2,8 +2,6 @@ package com.example.ajk_riset.slider;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
-import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -12,8 +10,10 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.Toast;
 
 import com.example.ajk_riset.DB.DBAdapter;
 import com.example.ajk_riset.Task.JSONFunction;
@@ -22,8 +22,18 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import cz.msebera.android.httpclient.HttpResponse;
+import cz.msebera.android.httpclient.NameValuePair;
+import cz.msebera.android.httpclient.client.ClientProtocolException;
+import cz.msebera.android.httpclient.client.HttpClient;
+import cz.msebera.android.httpclient.client.entity.UrlEncodedFormEntity;
+import cz.msebera.android.httpclient.client.methods.HttpPost;
+import cz.msebera.android.httpclient.impl.client.DefaultHttpClient;
+import cz.msebera.android.httpclient.message.BasicNameValuePair;
 
 /**
  * Created by setiyawan on 8/24/16.
@@ -33,8 +43,10 @@ public class SuratPerintahKerja extends Activity {
     SQLiteDatabase database;
     Button submit, Ambildata;
     Spinner pesanBarang, pengrajin;
-    EditText jumlahPesan, Keterangan;
+   public EditText jumlahPesan, Keterangan;
     Cursor kursor;
+    DatePicker deadline;
+    String jumlah,keterangan,pengerajin,pesanan,TanggalDeadline;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,11 +60,26 @@ public class SuratPerintahKerja extends Activity {
         Keterangan = (EditText) findViewById(R.id.editTextket);
         submit = (Button) findViewById(R.id.button5);
         Ambildata = (Button) findViewById(R.id.button6);
+        deadline = (DatePicker) findViewById(R.id.datePicker);
+
         addDataPesanan();
+        Pengerajin();
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+            int day = deadline.getDayOfMonth();
+                int month = deadline.getMonth()+1;
+                int year = deadline.getYear();
+                Toast.makeText(SuratPerintahKerja.this,"Tanggal = "+day+"-"+month+"-"+year,Toast.LENGTH_LONG).show();
+                jumlah = jumlahPesan.getText().toString();
+                keterangan = Keterangan.getText().toString();
+                String q[] = pengrajin.getSelectedItem().toString().split("||");
+                pengerajin = q[1];
+                String[] idPesanan = pesanBarang.getSelectedItem().toString().split("|");
+                pesanan = idPesanan[1];
+                TanggalDeadline = year+"-"+month+"-"+day;
+                Log.e("output","pengerajin"+q[1]+" pesanan "+pesanan);
+                new InsertSPK().execute("");
             }
         });
         Ambildata.setOnClickListener(new View.OnClickListener() {
@@ -67,10 +94,11 @@ public class SuratPerintahKerja extends Activity {
     public void addDataPesanan() {
 
         List<String> lis = new ArrayList<String>();
-        kursor = database.rawQuery("select _id from pemesanan", null);
+        kursor = database.rawQuery("select pemesanan._id,Master_produk.nama_produk from pemesanan,Master_produk where pemesanan.id_produk=Master_produk._id", null);
+        Log.e("Jumlah Pesanan = ","Jumlah Pesanan = "+kursor.getCount());
         kursor.moveToFirst();
         while (!kursor.isAfterLast()) {
-            String val = kursor.getString(0);
+            String val = kursor.getString(0)+"|"+kursor.getString(1);
 
             Log.e("adapter", "Lokasi " + val);
             lis.add(val);
@@ -78,6 +106,23 @@ public class SuratPerintahKerja extends Activity {
         }
         ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SuratPerintahKerja.this, android.R.layout.simple_spinner_dropdown_item, lis);
         pesanBarang.setAdapter(arrayAdapter);
+
+    }
+    public void Pengerajin() {
+
+        List<String> lis = new ArrayList<String>();
+        kursor = database.rawQuery("select _id,nama from Master_pengguna where jenis_pengguna='pengrajin'", null);
+        Log.e("Jumlah Pesanan = ","Jumlah Pesanan = "+kursor.getCount());
+        kursor.moveToFirst();
+        while (!kursor.isAfterLast()) {
+            String val = kursor.getString(0)+"||"+kursor.getString(1);
+
+            Log.e("adapter", "Lokasi " + val);
+            lis.add(val);
+            kursor.moveToNext();
+        }
+        ArrayAdapter<String> arrayAdapter = new ArrayAdapter<String>(SuratPerintahKerja.this, android.R.layout.simple_spinner_dropdown_item, lis);
+        pengrajin.setAdapter(arrayAdapter);
 
     }
 
@@ -113,10 +158,8 @@ public class SuratPerintahKerja extends Activity {
                 JSONArray data = json.getJSONArray("data");
                 Log.e("Main Jumlah : ", "" + data.length());
 
-                if (data.length() >= 1) {
-//                    Cek(useroid);
-//                    berhasil();
-                    JSONObject jsonobj = data.getJSONObject(0);
+                for (int i = 0; i < data.length(); i++) {
+                    JSONObject jsonobj = data.getJSONObject(i);
                     //simpan pada database
                     String id_pemesanan = jsonobj.getString("id_pemesanan");
                     String tanggal = jsonobj.getString("tanggal");
@@ -128,15 +171,48 @@ public class SuratPerintahKerja extends Activity {
                     Log.i("Data", id_pemesanan + " " + idm_pengguna + " " + idm_produk);
                     adapter.Pesanan(database, id_pemesanan, tanggal, idm_pengguna, idm_produk, harga_satuan, jumlah, total);
 
-                } else {
-
                 }
+                Pengrajin();
             } catch (JSONException e) {
                 Log.e("log_tag", "Error parsing data " + e.toString());
             }
 
 
             return null;
+        }
+        //load jadwal
+        public void Pengrajin(	){
+            Log.i("Barang", "Barang");
+            String itemoid,nama,type,harga;
+            JSONObject json = JSONFunction
+//				.getJSONfromURL("http://koento-agency.co.id/demo/appsani/json/barang.php");
+                    .getJSONfromURL("http://10.10.1.8/manop/data_pengrajin.php");
+//    	.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/barang.php");
+            try {
+
+                JSONArray data = json.getJSONArray("data");
+                Log.e("Main Jumlah : ", ""+data.length());
+                for (int i = 0; i < data.length(); i++) {
+                    //HashMap<String, String> map = new HashMap<String, String>();
+                    JSONObject jsonobj = data.getJSONObject(i);
+
+                    String idm_produk = jsonobj.getString("idm_pengguna");
+                    String nama_produk = jsonobj.getString("nama");
+                    String kategori = jsonobj.getString("alamat");
+                    String spesifikasi = jsonobj.getString("pengguna");
+                    String foto = jsonobj.getString("password");
+                    String persediaan = jsonobj.getString("email");
+                    String harga_satuan = jsonobj.getString("no_hp");
+                    String satuan = jsonobj.getString("keterangan");
+                    String harga_grosir = jsonobj.getString("jenis_pengguna");
+
+                    adapter.daftar(database, idm_produk, nama_produk, kategori, spesifikasi, foto, persediaan, harga_satuan, satuan, harga_grosir);
+                    // mylist.add(map);
+                }
+
+            } catch (JSONException e) {
+                Log.e("log_tag", "Error parsing data " + e.toString());
+            }
         }
 
         protected void onPostExecute(Void unused) {
@@ -148,6 +224,65 @@ public class SuratPerintahKerja extends Activity {
         }
 
     }
+
+    //insertdata
+    public class InsertSPK extends AsyncTask<String, Void, Void> {
+        HttpClient httpclient = new DefaultHttpClient();
+        HttpPost httppost = new HttpPost("http://10.10.1.8/manop/insert_spk.php");
+        //		HttpPost httppost = new HttpPost("http://192.168.137.1/AppsaniApp_new/update.php");
+        private ProgressDialog Dialog = new ProgressDialog(SuratPerintahKerja.this);
+
+
+        protected void onPreExecute() {
+            // NOTE: You can call UI Element here.
+
+            //UI Element
+
+            Dialog.setMessage("Loading Please Wait..");
+            Dialog.show();
+        }
+
+        // Call after onPreExecute method
+        protected Void doInBackground(String... urls) {
+            try {
+                // Add your data
+                List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
+                        5);
+
+                nameValuePairs.add(new BasicNameValuePair("id_pengguna", pengerajin));
+                nameValuePairs.add(new BasicNameValuePair("id_pesanan", pesanan));
+                nameValuePairs.add(new BasicNameValuePair("jumlah", jumlah));
+                nameValuePairs.add(new BasicNameValuePair("deadline", TanggalDeadline));
+                nameValuePairs.add(new BasicNameValuePair("catatan", keterangan));
+                httppost.setEntity(new UrlEncodedFormEntity(nameValuePairs));
+//					Log.e("data ", kursor.getString(0)+" "+kursor.getString(1)+" "+kursor.getString(2)+" "+kursor.getString(3));
+                // Execute HTTP Post Request
+                HttpResponse response = httpclient.execute(httppost);
+                Log.v("Post Status", "Code: "
+                        + response.getStatusLine().getReasonPhrase());
+
+
+            } catch (ClientProtocolException e) {
+
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+
+            }
+
+            return null;
+        }
+
+        protected void onPostExecute(Void unused) {
+            // NOTE: You can call UI Element here.
+
+            // Close progress SUr
+            Toast.makeText(SuratPerintahKerja.this, "Data Sudah Tersimpan", Toast.LENGTH_LONG).show();
+            Dialog.dismiss();
+        }
+    }
+
 
 
 }
