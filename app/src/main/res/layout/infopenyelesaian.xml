@@ -21,5 +21,10 @@
             android:layout_height="wrap_content"
             android:text="Back"
             android:id="@+id/back" />
+        <Button
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Ambil data"
+            android:id="@+id/getdata" />
     </LinearLayout>
 </LinearLayout>

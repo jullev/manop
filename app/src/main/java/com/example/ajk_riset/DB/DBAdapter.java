@@ -72,30 +72,25 @@ public class DBAdapter extends SQLiteOpenHelper {
         cv.put("total", total);
         db.insert("pemesanan", "pemesanan", cv);
     }
+    public void SPK(SQLiteDatabase db,String idProduct,String Tanggal,String id_pengguna,String id_pesanan,String jumlah_pesanan,String tanggal_selesai,String tanggal_update,String jumlah_bayar,String keterangan){
+        ContentValues cv = new ContentValues();
+        cv.put("_id", idProduct);
+        cv.put("tanggal", Tanggal);
+        cv.put("id_pengguna", id_pengguna);
+        cv.put("id_pesanan", id_pesanan);
+        cv.put("jumlah_pesanan", jumlah_pesanan);
+        cv.put("tanggal_selesai", tanggal_selesai);
+        cv.put("tanggal_update", tanggal_update);
+        cv.put("jumlah_bayar", jumlah_bayar);
+        cv.put("keterangan", keterangan);
+        db.insert("spk", "spk", cv);
+    }
 
 
 
     // method delAllAdata untuk menghapus data di table Wisata.
     public void delAllData(SQLiteDatabase db) {
-        db.delete("SKU", null, null);
-        db.delete("OSD", null, null);
-        db.delete("JumlahOSD", null, null);
-        db.delete("Kompetitor", null, null);
-        db.delete("schedule", null, null);
-        db.delete("RakW1OSD", null, null);
-        db.delete("RakW1SKU", null, null);
-        db.delete("RakW1Kompetitor", null, null);
-        db.delete("RakW2SKU", null, null);
-        db.delete("RakW2OSD", null, null);
-        db.delete("RakW2Kompetitor", null, null);
-        db.delete("RakW3SKU", null, null);
-        db.delete("RakW3OSD", null, null);
-        db.delete("RakW3Kompetitor", null, null);
-        db.delete("RakW4SKU", null, null);
-        db.delete("RakW4OSD", null, null);
-        db.delete("RakW4Kompetitor", null, null);
-        db.delete("Notes", null, null);
-        db.delete("ticker", null, null);
+        db.delete("spk", null, null);
     }
 
     public Cursor fetchAllWisata(SQLiteDatabase db) {

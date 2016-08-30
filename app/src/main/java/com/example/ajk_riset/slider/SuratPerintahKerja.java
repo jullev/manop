@@ -76,10 +76,10 @@ public class SuratPerintahKerja extends Activity {
                 String q[] = pengrajin.getSelectedItem().toString().split("||");
                 pengerajin = q[1];
                 String[] idPesanan = pesanBarang.getSelectedItem().toString().split("|");
-                pesanan = idPesanan[1];
+                pesanan = idPesanan[0];
                 TanggalDeadline = year+"-"+month+"-"+day;
                 Log.e("output","pengerajin"+q[1]+" pesanan "+pesanan);
-                new InsertSPK().execute("");
+//                new InsertSPK().execute("");
             }
         });
         Ambildata.setOnClickListener(new View.OnClickListener() {
