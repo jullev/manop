@@ -2,6 +2,8 @@ package com.example.ajk_riset.slider;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.Button;
@@ -12,7 +14,7 @@ import com.example.ajk_riset.adapter.CustomListMasterProduk;
 /**
  * Created by AJK-Riset on 8/12/2016.
  */
-public class MasterProduk  extends Activity{
+public class MasterProduk  extends AppCompatActivity{
     Button tambahBarang;
     ListView lv;
     private String names[] = {
@@ -38,6 +40,9 @@ public class MasterProduk  extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.masterbarang);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         tambahBarang = (Button) findViewById(R.id.button);
         lv = (ListView) findViewById(R.id.listView2);
         CustomListMasterProduk mp = new CustomListMasterProduk(MasterProduk.this,names,desc,imageid);
@@ -54,5 +59,16 @@ public class MasterProduk  extends Activity{
 
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //Write your logic here
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 }

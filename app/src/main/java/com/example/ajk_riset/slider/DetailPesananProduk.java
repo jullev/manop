@@ -2,6 +2,7 @@ package com.example.ajk_riset.slider;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -11,7 +12,7 @@ import android.widget.TextView;
 /**
  * Created by AJK-Riset on 8/11/2016.
  */
-public class DetailPesananProduk extends Activity{
+public class DetailPesananProduk extends AppCompatActivity{
     TextView nama,detail,harga;
     ImageView image;
     Button btnBack;
@@ -38,6 +39,9 @@ public class DetailPesananProduk extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailpesananproduk);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         int pilihan = getIntent().getExtras().getInt("produk");
         Log.e("pilihan = ",pilihan+"");
         nama = (TextView) findViewById(R.id.textView3);

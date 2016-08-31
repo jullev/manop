@@ -7,7 +7,10 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -28,7 +31,7 @@ import java.util.List;
 /**
  * Created by AJK-Riset on 8/11/2016.
  */
-public class InfoDataPenyelesaian extends Activity {
+public class InfoDataPenyelesaian extends AppCompatActivity {
     ListView lv;
     Button btnback, btnAmbilData;
     DBAdapter adapter;
@@ -45,6 +48,9 @@ public class InfoDataPenyelesaian extends Activity {
         setContentView(R.layout.infopenyelesaian);
         adapter = new DBAdapter(InfoDataPenyelesaian.this);
         database = adapter.getWritableDatabase();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         lv = (ListView) findViewById(R.id.listView);
         btnback = (Button) findViewById(R.id.back);
         btnAmbilData = (Button) findViewById(R.id.getdata);
@@ -74,6 +80,17 @@ public class InfoDataPenyelesaian extends Activity {
                 startActivity(intent);
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //Write your logic here
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void LoadData() {

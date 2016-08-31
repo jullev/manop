@@ -6,7 +6,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -38,7 +40,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 /**
  * Created by setiyawan on 8/24/16.
  */
-public class SuratPerintahKerja extends Activity {
+public class SuratPerintahKerja extends AppCompatActivity {
     DBAdapter adapter;
     SQLiteDatabase database;
     Button submit, Ambildata;
@@ -52,6 +54,9 @@ public class SuratPerintahKerja extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.suratperintahkerja);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         adapter = new DBAdapter(SuratPerintahKerja.this);
         database = adapter.getWritableDatabase();
         pesanBarang = (Spinner) findViewById(R.id.spinner3);
@@ -91,7 +96,17 @@ public class SuratPerintahKerja extends Activity {
         });
 
     }
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //Write your logic here
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
     public void addDataPesanan() {
 
         List<String> lis = new ArrayList<String>();

@@ -7,9 +7,11 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -36,7 +38,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 /**
  * Created by AJK-Riset on 8/18/2016.
  */
-public class InputPesanan extends Activity {
+public class InputPesanan extends AppCompatActivity {
     DBAdapter adapter;
     SQLiteDatabase database;
     Spinner namaProduk;
@@ -51,6 +53,9 @@ public class InputPesanan extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.inputpesanan);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         adapter = new DBAdapter(InputPesanan.this);
         database = adapter.getWritableDatabase();
         namaProduk = (Spinner) findViewById(R.id.spinner2);
@@ -103,6 +108,17 @@ public class InputPesanan extends Activity {
                 new InsertPesanan().execute("");
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //Write your logic here
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
 
     public void addDataBarang() {

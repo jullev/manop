@@ -7,7 +7,9 @@ import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -31,7 +33,7 @@ import cz.msebera.android.httpclient.message.BasicNameValuePair;
 /**
  * Created by AJK-Riset on 8/30/2016.
  */
-public class DetailInfoPenyelesaian extends Activity{
+public class DetailInfoPenyelesaian extends AppCompatActivity {
     DBAdapter adapter;
     SQLiteDatabase database;
     EditText idspk,tanggaSpk,Pengerajin,idPesanan,JumlahKerja,deadline,lastupdate,jumlahSelesai,keterangan;
@@ -42,6 +44,9 @@ public class DetailInfoPenyelesaian extends Activity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.detailpenyelesaian);
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setHomeButtonEnabled(true);
+        actionBar.setDisplayHomeAsUpEnabled(true);
         adapter = new DBAdapter(DetailInfoPenyelesaian.this);
         database = adapter.getReadableDatabase();
         final String idSPK = getIntent().getExtras().getString("idspk");
@@ -66,6 +71,17 @@ public class DetailInfoPenyelesaian extends Activity{
 
             }
         });
+    }
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                //Write your logic here
+                this.finish();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
     }
     public void GetData(String spk){
         kursor = database.rawQuery("select spk._id,spk.Tanggal,master_pengguna.nama,spk.id_pesanan,spk.jumlah_pesanan,spk.tanggal_selesai,spk.tanggal_update,spk.jumlah_bayar,spk.keterangan from spk,master_pengguna where spk.id_pengguna=master_pengguna._id and spk._id='"+spk+"'", null);
