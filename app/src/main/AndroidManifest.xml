@@ -38,6 +38,7 @@
         <activity android:name=".MasterProduk" android:screenOrientation="portrait"></activity>
         <activity android:name=".InputPesanan" android:screenOrientation="portrait"></activity>
         <activity android:name=".SuratPerintahKerja" android:screenOrientation="portrait"></activity>
+        <activity android:name=".DetailInfoPenyelesaian" android:screenOrientation="portrait"></activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

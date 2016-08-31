@@ -92,6 +92,10 @@ public class DBAdapter extends SQLiteOpenHelper {
     public void delAllData(SQLiteDatabase db) {
         db.delete("spk", null, null);
     }
+    public void delSPK(SQLiteDatabase db) {
+        db.delete("spk", null, null);
+//        db.execSQL("CREATE TABLE if not exists spk (_id INTEGER PRIMARY KEY,tanggal TEXT,id_pengguna TEXT,id_pesanan TEXT,jumlah_pesanan TEXT,tanggal_selesai TEXT,tanggal_update TEXT,jumlah_bayar TEXT,keterangan TEXT);");
+    }
 
     public Cursor fetchAllWisata(SQLiteDatabase db) {
         return db.query("WISATA", new String[] { KEY_ID, NAMA }, null, null,

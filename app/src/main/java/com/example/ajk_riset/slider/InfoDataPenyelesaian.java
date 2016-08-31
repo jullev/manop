@@ -2,6 +2,7 @@ package com.example.ajk_riset.slider;
 
 import android.app.Activity;
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
@@ -33,7 +34,7 @@ public class InfoDataPenyelesaian extends Activity {
     DBAdapter adapter;
     SQLiteDatabase database;
     Cursor kursor;
-    private String id[];
+    private String Id[];
     private String jenis[];
     private String status[];
     CustomListInfoPesanan custom;
@@ -58,13 +59,19 @@ public class InfoDataPenyelesaian extends Activity {
         btnAmbilData.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                adapter.delSPK(database);
             new LongOperation().execute("");
             }
         });
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+            Log.e("ID","id:"+Id[position]);
+                Intent intent = new Intent(InfoDataPenyelesaian.this,DetailInfoPenyelesaian.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putString("idspk", Id[position]);
+                intent.putExtras(mBundle);
+                startActivity(intent);
             }
         });
     }
@@ -74,21 +81,21 @@ public class InfoDataPenyelesaian extends Activity {
         kursor = database.rawQuery("select spk._id,spk.Tanggal,master_pengguna.nama from spk,master_pengguna where spk.id_pengguna=master_pengguna._id", null);
         Log.e("Jumlah Pesanan = ", "Jumlah Pesanan = " + kursor.getCount());
         kursor.moveToFirst();
-        id = new String[kursor.getCount()];
+        Id = new String[kursor.getCount()];
         jenis = new String[kursor.getCount()];
         status = new String[kursor.getCount()];
 
         int counter=0;
         while (!kursor.isAfterLast()) {
             String val = kursor.getString(0)+"|"+kursor.getString(1);
-            id[counter]=kursor.getString(0);
+            Id[counter]=kursor.getString(0);
             jenis[counter]=kursor.getString(1);
             status[counter]=kursor.getString(2);
             Log.e("adapter", "Lokasi " + val);
             counter++;
             kursor.moveToNext();
         }
-        custom = new CustomListInfoPesanan(this, id, status, jenis);
+        custom = new CustomListInfoPesanan(this, Id, status, jenis);
         lv.setAdapter(custom);
 
     }

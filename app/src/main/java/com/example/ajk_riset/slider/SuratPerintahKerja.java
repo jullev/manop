@@ -85,7 +85,8 @@ public class SuratPerintahKerja extends Activity {
         Ambildata.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-            new LongOperation().execute("");
+                adapter.delSPK(database);
+                new LongOperation().execute("");
             }
         });
 
