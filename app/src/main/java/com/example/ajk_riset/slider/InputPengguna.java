@@ -140,8 +140,8 @@ public class InputPengguna extends AppCompatActivity{
     //insertdata
     public class InsertPengguna extends AsyncTask<String, Void, Void> {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://10.10.1.8/manop/manajemenpengguna.php");
-        //		HttpPost httppost = new HttpPost("http://192.168.137.1/AppsaniApp_new/update.php");
+//        HttpPost httppost = new HttpPost("http://10.10.1.8/manop/manajemenpengguna.php");
+        		HttpPost httppost = new HttpPost("http://10.208.69.236/manop/manajemenpengguna.php");
         private ProgressDialog Dialog = new ProgressDialog(InputPengguna.this);
 
 
