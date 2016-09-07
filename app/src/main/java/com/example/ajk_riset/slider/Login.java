@@ -24,14 +24,15 @@ import org.json.JSONObject;
 /**
  * Created by AJK-Riset on 8/11/2016.
  */
-public class Login extends Activity{
+public class Login extends Activity {
     Button login;
-    EditText username,password;
+    EditText username, password;
     SharedPreferences pref;
     SQLiteDatabase database;
     DBAdapter adapter;
-    String uname,pass;
+    String uname, pass;
     String url;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,28 +43,34 @@ public class Login extends Activity{
         login = (Button) findViewById(R.id.button3);
         username = (EditText) findViewById(R.id.username);
         password = (EditText) findViewById(R.id.password);
-        Log.e("pref",pref.getString("username","kosong"));
-        if(pref.contains("username")){
-            Intent intent = new Intent(Login.this,MainActivity.class);
-            startActivity(intent);
-        }
-        else {
+        Log.e("pref", pref.getString("username", "kosong"));
+        if (pref.contains("username")) {
+            if(pref.getString("role","Admin").equals("Admin")) {
+                Intent intent = new Intent(Login.this, MainActivity.class);
+                startActivity(intent);
+            }
+            else{
+                Intent intent = new Intent(Login.this, MainActivityPengerajin.class);
+                startActivity(intent);
+            }
+        } else {
             login.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    uname=username.getText().toString();
-                    pass=password.getText().toString();
-                new LongOperation().execute(url);
+                    uname = username.getText().toString();
+                    pass = password.getText().toString();
+                    new LongOperation().execute(url);
 
                 }
             });
         }
     }
+
     // Class with extends AsyncTask class
-    private class LongOperation  extends AsyncTask<String, Void, Void> {
+    private class LongOperation extends AsyncTask<String, Void, Void> {
 
         private ProgressDialog Dialog = new ProgressDialog(Login.this);
-        String jumlah,status,useroid;
+        String jumlah, status, useroid;
 
 
         protected void onPreExecute() {
@@ -89,15 +96,16 @@ public class Login extends Activity{
             try {
 
                 JSONArray data = json.getJSONArray("data");
-                Log.e("Main Jumlah : ", ""+data.length());
+                Log.e("Main Jumlah : ", "" + data.length());
 
-                if(data.length()>=1){
+                if (data.length() >= 1) {
 //                    Cek(useroid);
 //                    berhasil();
                     JSONObject jsonobj = data.getJSONObject(0);
                     SharedPreferences.Editor editor = pref.edit();
                     editor.putString("username", jsonobj.getString("pengguna"));
                     editor.putString("email", jsonobj.getString("email"));
+                    editor.putString("role", jsonobj.getString("jenis_pengguna"));
                     editor.commit();
                     //simpan pada database
                     String id_pengguna = jsonobj.getString("idm_pengguna");
@@ -109,13 +117,20 @@ public class Login extends Activity{
                     String nohp = jsonobj.getString("no_hp");
                     String keterangan = jsonobj.getString("keterangan");
                     String role = jsonobj.getString("jenis_pengguna");
-                    Log.i("Data",id_pengguna+" "+nama+" "+alamat);
+                    useroid =role;
+                    Log.i("Data", id_pengguna + " " + nama + " " + alamat);
                     adapter.daftar(database, id_pengguna, nama, alamat, username, pass, email, nohp, keterangan, role);
-                    Barang();
-                    Intent intent = new Intent(Login.this,MainActivity.class);
-                    startActivity(intent);
-                }
-                else{
+                    if(role.equals("Admin")) {
+                        Barang();
+                        Intent intent = new Intent(Login.this, MainActivity.class);
+                        startActivity(intent);
+                    }
+                    else {
+                        Barang();
+                        Intent intent = new Intent(Login.this, MainActivityPengerajin.class);
+                        startActivity(intent);
+                    }
+                } else {
 
                 }
             } catch (JSONException e) {
@@ -135,53 +150,21 @@ public class Login extends Activity{
         }
 
     }
-    public void Cek(String username){
+
+    public void Cek(String username) {
         Cursor kursor = database.rawQuery("select count(*) from Jadwal", null);
         kursor.moveToFirst();
         int jumlah = kursor.getInt(0);
-        if (jumlah<=0){
-            Data(username);
+        if (jumlah <= 0) {
             Barang();
         }
     }
 
 
     //load jadwal
-    public void Data(String username){
-        Log.i("Jadwal", "Jadwal");
-        String surveydate,orderid,alamat,item,sosial,jamban,status;
-        JSONObject json = JSONFunction
-//				.getJSONfromURL("http://koento-agency.co.id/demo/appsani/json/jadwal.php?username="+username);
-                .getJSONfromURL("http://162.243.52.143/appsani/json/data.php?username=" + username);
-//    	.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/jadwal.php?username="+username);
-        try {
-
-            JSONArray makanan = json.getJSONArray("data");
-            Log.e("Main Jumlah : ", ""+makanan.length());
-            for (int i = 0; i < makanan.length(); i++) {
-                //HashMap<String, String> map = new HashMap<String, String>();
-                JSONObject jsonobj = makanan.getJSONObject(i);
-
-                surveydate = jsonobj.getString("surveydate");
-                orderid = jsonobj.getString("orderoid");
-                item = jsonobj.getString("itemoid");
-                jamban = jsonobj.getString("sanitasi");
-                sosial = jsonobj.getString("sosial");
-
-                status = jsonobj.getString("status_survey");
-                Log.i("Data", surveydate + " " + orderid + " " + jamban);
-//                adapter.daftar(database, orderid, "", "", username, jamban, sosial, "", status);
-                // mylist.add(map);jullev
-            }
-
-        } catch (JSONException e) {
-            Log.e("log_tag", "Error parsing data " + e.toString());
-        }
-    }
-    //load jadwal
-    public void Barang(	){
+    public void Barang() {
         Log.i("Barang", "Barang");
-        String itemoid,nama,type,harga;
+        String itemoid, nama, type, harga;
         JSONObject json = JSONFunction
 //				.getJSONfromURL("http://koento-agency.co.id/demo/appsani/json/barang.php");
                 .getJSONfromURL("http://10.10.1.8/manop/barang.php");
@@ -189,7 +172,7 @@ public class Login extends Activity{
         try {
 
             JSONArray data = json.getJSONArray("data");
-            Log.e("Main Jumlah : ", ""+data.length());
+            Log.e("Main Jumlah : ", "" + data.length());
             for (int i = 0; i < data.length(); i++) {
                 //HashMap<String, String> map = new HashMap<String, String>();
                 JSONObject jsonobj = data.getJSONObject(i);
@@ -204,8 +187,7 @@ public class Login extends Activity{
                 String satuan = jsonobj.getString("satuan");
                 String harga_grosir = jsonobj.getString("harga_grosir");
                 String satuan_grosir = jsonobj.getString("satuan_grosir");
-
-                adapter.isiData(database, idm_produk, nama_produk, kategori, spesifikasi,foto,persediaan,harga_satuan,satuan,harga_grosir,satuan_grosir);
+                adapter.isiData(database, idm_produk, nama_produk, kategori, spesifikasi, foto, persediaan, harga_satuan, satuan, harga_grosir, satuan_grosir);
                 // mylist.add(map);
             }
 

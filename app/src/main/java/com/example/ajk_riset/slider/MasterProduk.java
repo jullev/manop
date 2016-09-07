@@ -1,6 +1,7 @@
 package com.example.ajk_riset.slider;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
@@ -43,6 +44,7 @@ public class MasterProduk  extends AppCompatActivity{
             R.drawable.bros_tumb,
             R.drawable.kalung_tumb,
             R.drawable.cincin_tumb,
+            R.drawable.manik2_tumb,
             R.drawable.manik2_tumb
     };
     @Override
@@ -60,31 +62,39 @@ public class MasterProduk  extends AppCompatActivity{
         tambahBarang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent(MasterProduk.this,DetailProduk.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putString("idbarang", "0");
+                intent.putExtras(mBundle);
+                startActivity(intent);
             }
         });
         lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-
+                Intent intent = new Intent(MasterProduk.this,DetailProduk.class);
+                Bundle mBundle = new Bundle();
+                mBundle.putString("idbarang",names[position]);
+                intent.putExtras(mBundle);
+                startActivity(intent);
             }
         });
     }
     public void LoadData() {
 
-        kursor = database.rawQuery("select _id,spk.Tanggal,nama_produk,foto from master_produk", null);
+        kursor = database.rawQuery("select _id,nama_produk,foto from master_produk", null);
         Log.e("Jumlah Pesanan = ", "Jumlah Pesanan = " + kursor.getCount());
         kursor.moveToFirst();
         names = new String[kursor.getCount()];
         desc = new String[kursor.getCount()];
-        imageid = new Integer[kursor.getCount()];
+//        imageid = new Integer[kursor.getCount()];
 
         int counter=0;
         while (!kursor.isAfterLast()) {
             String val = kursor.getString(0)+"|"+kursor.getString(1);
             names[counter]=kursor.getString(0);
             desc[counter]=kursor.getString(1);
-            imageid[counter]=kursor.getInt(2);
+            imageid[counter]=R.mipmap.ic_launcher;
             Log.e("adapter", "Lokasi " + val);
             counter++;
             kursor.moveToNext();

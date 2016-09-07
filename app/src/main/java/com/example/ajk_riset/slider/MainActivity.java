@@ -80,6 +80,12 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
+            SharedPreferences preferences = getSharedPreferences("MyPref", 0);
+            preferences.edit().remove("username");
+            preferences.edit().remove("email");
+            preferences.edit().remove("jenis_pengguna");
+            preferences.edit().commit();
+            this.finish();
             return true;
         }
 

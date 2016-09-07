@@ -29,6 +29,16 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".MainActivityPengerajin"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
+            <intent-filter>
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
 
         <activity android:name=".InfoPemesananProduk" android:screenOrientation="portrait"></activity>
         <activity android:name=".DetailPesananProduk" android:screenOrientation="portrait"></activity>
@@ -39,6 +49,7 @@
         <activity android:name=".InputPesanan" android:screenOrientation="portrait"></activity>
         <activity android:name=".SuratPerintahKerja" android:screenOrientation="portrait"></activity>
         <activity android:name=".DetailInfoPenyelesaian" android:screenOrientation="portrait"></activity>
+        <activity android:name=".DetailProduk" android:screenOrientation="portrait"></activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
