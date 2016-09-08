@@ -174,6 +174,7 @@ public class InfoDataPenyelesaian extends AppCompatActivity {
             // NOTE: You can call UI Element here.
 
             // Close progress dialog
+            LoadData();
             Dialog.dismiss();
 
         }

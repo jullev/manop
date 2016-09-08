@@ -84,7 +84,7 @@ public class SuratPerintahKerja extends AppCompatActivity {
                 pesanan = idPesanan[0];
                 TanggalDeadline = year+"-"+month+"-"+day;
                 Log.e("output","pengerajin"+q[1]+" pesanan "+pesanan);
-//                new InsertSPK().execute("");
+                new InsertSPK().execute("");
             }
         });
         Ambildata.setOnClickListener(new View.OnClickListener() {

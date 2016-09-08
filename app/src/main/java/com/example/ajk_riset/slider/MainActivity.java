@@ -80,11 +80,12 @@ public class MainActivity extends AppCompatActivity
 
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_settings) {
-            SharedPreferences preferences = getSharedPreferences("MyPref", 0);
-            preferences.edit().remove("username");
-            preferences.edit().remove("email");
-            preferences.edit().remove("jenis_pengguna");
-            preferences.edit().commit();
+            SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove("username");
+            editor.remove("email");
+            editor.remove("jenis_pengguna");
+            editor.commit();
             this.finish();
             return true;
         }
@@ -107,8 +108,10 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.info_bahan) {
-
+            Intent intent = new Intent(this,PembeliaanBahan.class);
+            startActivity(intent);
         } else if (id == R.id.guna_bahan) {
+
 
         } else if (id == R.id.nav_share) {
 

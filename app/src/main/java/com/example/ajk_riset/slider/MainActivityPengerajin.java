@@ -82,11 +82,12 @@ public class MainActivityPengerajin extends AppCompatActivity
         if (id == R.id.action_settings) {
             Log.e("Log out", "Log Out");
             Toast.makeText(MainActivityPengerajin.this, "Log Out", Toast.LENGTH_LONG).show();
-            SharedPreferences preferences = getSharedPreferences("MyPref", 0);
-            preferences.edit().remove("username");
-            preferences.edit().remove("email");
-            preferences.edit().remove("jenis_pengguna");
-            preferences.edit().commit();
+            SharedPreferences preferences = getApplicationContext().getSharedPreferences("MyPref", MODE_PRIVATE);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.remove("username");
+            editor.remove("email");
+            editor.remove("jenis_pengguna");
+            editor.commit();
             this.finish();
             return true;
 

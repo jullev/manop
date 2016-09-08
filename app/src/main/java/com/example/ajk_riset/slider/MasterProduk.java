@@ -87,7 +87,7 @@ public class MasterProduk  extends AppCompatActivity{
         kursor.moveToFirst();
         names = new String[kursor.getCount()];
         desc = new String[kursor.getCount()];
-//        imageid = new Integer[kursor.getCount()];
+        imageid = new Integer[kursor.getCount()];
 
         int counter=0;
         while (!kursor.isAfterLast()) {
