@@ -52,6 +52,7 @@
         <activity android:name=".DetailProduk" android:screenOrientation="portrait"></activity>
         <activity android:name=".PembeliaanBahan" android:screenOrientation="portrait"></activity>
         <activity android:name=".DetailPembelianBahan" android:screenOrientation="portrait"></activity>
+        <activity android:name=".HasilProduksi" android:screenOrientation="portrait"></activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>

@@ -270,6 +270,7 @@ public class DetailPembelianBahan extends AppCompatActivity {
                     Log.e("Main Jumlah : ", "" + data.length());
                     for (int i = 0; i < data.length(); i++) {
                         JSONObject jsonobj = data.getJSONObject(i);
+                        status=1;
                         //simpan pada database
                         id_pembelian = jsonobj.getString("id_pembelian");
                         nama = jsonobj.getString("nama");
