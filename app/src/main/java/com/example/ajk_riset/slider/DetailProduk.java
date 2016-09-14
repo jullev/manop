@@ -132,7 +132,7 @@ public class DetailProduk extends AppCompatActivity {
     //insertdata
     public class InsertPengguna extends AsyncTask<String, Void, Void> {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://10.10.1.8/manop/manajemenproduk.php");
+        HttpPost httppost = new HttpPost("http://plnbima.esy.es/manop/manajemenproduk.php");
         //        HttpPost httppost = new HttpPost("http://10.208.69.236/manop/manajemenpengguna.php");
         private ProgressDialog Dialog = new ProgressDialog(DetailProduk.this);
 
@@ -219,7 +219,7 @@ public class DetailProduk extends AppCompatActivity {
 
             // Server url call by GET method
 
-            JSONObject json = JSONFunction.getJSONfromURL("http://10.10.1.8/manop/cariproduk.php?id=" + idbarang);
+            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/cariproduk.php?id=" + idbarang);
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
             try {
 

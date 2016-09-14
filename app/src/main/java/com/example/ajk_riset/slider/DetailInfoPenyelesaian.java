@@ -105,7 +105,7 @@ public class DetailInfoPenyelesaian extends AppCompatActivity {
     //insertdata
     public class UpdateSPK extends AsyncTask<String, Void, Void> {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://10.10.1.8/manop/updatespk.php");
+        HttpPost httppost = new HttpPost("http://plnbima.esy.es/manop/updatespk.php");
         //		HttpPost httppost = new HttpPost("http://192.168.137.1/AppsaniApp_new/update.php");
         private ProgressDialog Dialog = new ProgressDialog(DetailInfoPenyelesaian.this);
 

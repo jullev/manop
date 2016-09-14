@@ -170,7 +170,7 @@ public class DetailPembelianBahan extends AppCompatActivity {
     //insertdata
     public class InsertProduk extends AsyncTask<String, Void, Void> {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://10.10.1.8/manop/manajemenpembelian.php");
+        HttpPost httppost = new HttpPost("http://plnbima.esy.es/manop/manajemenpembelian.php");
         //		HttpPost httppost = new HttpPost("http://192.168.137.1/AppsaniApp_new/update.php");
         private ProgressDialog Dialog = new ProgressDialog(DetailPembelianBahan.this);
         String jumlah, status, useroid;
@@ -256,7 +256,7 @@ public class DetailPembelianBahan extends AppCompatActivity {
             // NOTE: Don't call UI Element here.
 
             // Server url call by GET method
-            String url = "http://10.10.1.8/manop/pembelianproduk.php?id=" + Id;
+            String url = "http://plnbima.esy.es/manop/pembelianproduk.php?id=" + Id;
             Log.e("url", url);
             JSONObject json = JSONFunction.getJSONfromURL(url);
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);

@@ -167,7 +167,7 @@ public class SuratPerintahKerja extends AppCompatActivity {
 
             // Server url call by GET method
 
-            JSONObject json = JSONFunction.getJSONfromURL("http://10.10.1.8/manop/data_pesanan.php");
+            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/data_pesanan.php");
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
             try {
 
@@ -202,7 +202,7 @@ public class SuratPerintahKerja extends AppCompatActivity {
             String itemoid,nama,type,harga;
             JSONObject json = JSONFunction
 //				.getJSONfromURL("http://koento-agency.co.id/demo/appsani/json/barang.php");
-                    .getJSONfromURL("http://10.10.1.8/manop/data_pengrajin.php");
+                    .getJSONfromURL("http://plnbima.esy.es/manop/data_pengrajin.php");
 //    	.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/barang.php");
             try {
 
@@ -244,7 +244,7 @@ public class SuratPerintahKerja extends AppCompatActivity {
     //insertdata
     public class InsertSPK extends AsyncTask<String, Void, Void> {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://10.10.1.8/manop/insert_spk.php");
+        HttpPost httppost = new HttpPost("http://plnbima.esy.es/manop/insert_spk.php");
         //		HttpPost httppost = new HttpPost("http://192.168.137.1/AppsaniApp_new/update.php");
         private ProgressDialog Dialog = new ProgressDialog(SuratPerintahKerja.this);
 
