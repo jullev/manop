@@ -17,38 +17,38 @@ import android.widget.Toast;
 import com.example.ajk_riset.DB.DBAdapter;
 import com.example.ajk_riset.Task.JSONFunction;
 import com.example.ajk_riset.adapter.CustomListKetersediaanBahan;
-import com.example.ajk_riset.adapter.CustomListPembelian;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by AJK-Riset on 9/8/2016.
+ * Created by AJK-Riset on 9/16/2016.
  */
-public class InfoKetersediaanBahan extends AppCompatActivity{
+public class PenggunaanBahanBaku extends AppCompatActivity{
     DBAdapter adapter;
     SQLiteDatabase database;
-    ListView lv;
-    Button AmbilData;
+    ListView listView;
+    Button submit;
     CustomListKetersediaanBahan ckb;
     String[] Id, nama, tanggal;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.infoketersediaanbahan);
-        adapter = new DBAdapter(InfoKetersediaanBahan.this);
+        adapter = new DBAdapter(PenggunaanBahanBaku.this);
         database = adapter.getWritableDatabase();
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
-        AmbilData = (Button) findViewById(R.id.button9);
-        lv = (ListView) findViewById(R.id.listView3);
+        submit = (Button) findViewById(R.id.button9);
+        listView = (ListView) findViewById(R.id.listView3);
         new LongOperation().execute("");
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(InfoKetersediaanBahan.this, DetailPembelianBahan.class);
+                Log.e("pilih",Id[position]);
+                Intent intent = new Intent(PenggunaanBahanBaku.this, DetailPenggunaanBahanBaku.class);
                 intent.putExtra("produk", Id[position]);
                 startActivity(intent);
             }
@@ -68,7 +68,7 @@ public class InfoKetersediaanBahan extends AppCompatActivity{
     // Class with extends AsyncTask class
     private class LongOperation extends AsyncTask<String, Void, Void> {
 
-        private ProgressDialog Dialog = new ProgressDialog(InfoKetersediaanBahan.this);
+        private ProgressDialog Dialog = new ProgressDialog(PenggunaanBahanBaku.this);
         int status,jumlah,pembelian;
 
         protected void onPreExecute() {
@@ -89,7 +89,7 @@ public class InfoKetersediaanBahan extends AppCompatActivity{
 
             // Server url call by GET method
 
-            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/infobahan.php");
+            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/data_pengrajin.php");
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
             try {
 
@@ -106,18 +106,11 @@ public class InfoKetersediaanBahan extends AppCompatActivity{
                     for (int i = 0; i < data.length(); i++) {
                         JSONObject jsonobj = data.getJSONObject(i);
                         //simpan pada database
-                        Id[i] = jsonobj.getString("idm_produk");
-                        nama[i] = jsonobj.getString("nama_produk");
-                        jumlah = jsonobj.getInt("persediaan");
-                        pembelian = jsonobj.getInt("jumlah");
-                        int ketersediaan = jumlah-pembelian;
-                        if(ketersediaan<=0){
-                            tanggal[i] ="Habis";
-                        }else{
-                            tanggal[i] = "Tersedia";
-                        }
+                        Id[i] = jsonobj.getString("idm_pengguna");
+                        nama[i] = jsonobj.getString("nama");
+                        tanggal[i] = jsonobj.getString("jenis_pengguna");
 
-                        Log.i("Data", nama[i] + " " + tanggal[i] + " " + Id[i]+" "+ketersediaan);
+                        Log.i("Data", nama[i] + " " + tanggal[i] + " " + Id[i]+" ");
 
                     }
                 }
@@ -135,11 +128,11 @@ public class InfoKetersediaanBahan extends AppCompatActivity{
 
             // Close progress dialog
             if(status>0) {
-                ckb = new CustomListKetersediaanBahan(InfoKetersediaanBahan.this, Id, nama, tanggal);
-                lv.setAdapter(ckb);
+                ckb = new CustomListKetersediaanBahan(PenggunaanBahanBaku.this, Id, nama, tanggal);
+                listView.setAdapter(ckb);
             }
             else{
-                Toast.makeText(InfoKetersediaanBahan.this, "Data Kosong", Toast.LENGTH_LONG).show();
+                Toast.makeText(PenggunaanBahanBaku.this, "Data Kosong", Toast.LENGTH_LONG).show();
             }
             Dialog.dismiss();
 

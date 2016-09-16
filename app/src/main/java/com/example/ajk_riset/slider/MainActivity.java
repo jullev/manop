@@ -108,10 +108,12 @@ public class MainActivity extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.info_bahan) {
-
+            Intent intent = new Intent(this,InfoKetersediaanBahan.class);
+            startActivity(intent);
         } else if (id == R.id.guna_bahan) {
 
-
+            Intent intent = new Intent(this,PenggunaanBahanBaku.class);
+            startActivity(intent);
         } else if (id == R.id.nav_share) {
             Intent intent = new Intent(this,PembeliaanBahan.class);
             startActivity(intent);

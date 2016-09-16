@@ -1,58 +1,45 @@
 package com.example.ajk_riset.slider;
 
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.database.sqlite.SQLiteDatabase;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.AdapterView;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.Toast;
 
 import com.example.ajk_riset.DB.DBAdapter;
 import com.example.ajk_riset.Task.JSONFunction;
-import com.example.ajk_riset.adapter.CustomListKetersediaanBahan;
-import com.example.ajk_riset.adapter.CustomListPembelian;
+import com.example.ajk_riset.adapter.CustomListPenggunaanBahanBaku;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 /**
- * Created by AJK-Riset on 9/8/2016.
+ * Created by AJK-Riset on 9/16/2016.
  */
-public class InfoKetersediaanBahan extends AppCompatActivity{
+public class DetailPenggunaanBahanBaku extends AppCompatActivity{
     DBAdapter adapter;
     SQLiteDatabase database;
     ListView lv;
-    Button AmbilData;
-    CustomListKetersediaanBahan ckb;
-    String[] Id, nama, tanggal;
+    String[] Id, nama, tanggal,Jenis,Jumlah;
+    String id_pengrajin;
+    CustomListPenggunaanBahanBaku cpbk;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.infoketersediaanbahan);
-        adapter = new DBAdapter(InfoKetersediaanBahan.this);
+        setContentView(R.layout.listviewactivity);
+        adapter = new DBAdapter(DetailPenggunaanBahanBaku.this);
         database = adapter.getWritableDatabase();
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
+        id_pengrajin = getIntent().getExtras().getString("produk");
         actionBar.setDisplayHomeAsUpEnabled(true);
-        AmbilData = (Button) findViewById(R.id.button9);
-        lv = (ListView) findViewById(R.id.listView3);
+        lv = (ListView) findViewById(R.id.listView5);
         new LongOperation().execute("");
-        lv.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Intent intent = new Intent(InfoKetersediaanBahan.this, DetailPembelianBahan.class);
-                intent.putExtra("produk", Id[position]);
-                startActivity(intent);
-            }
-        });
     }
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -68,7 +55,7 @@ public class InfoKetersediaanBahan extends AppCompatActivity{
     // Class with extends AsyncTask class
     private class LongOperation extends AsyncTask<String, Void, Void> {
 
-        private ProgressDialog Dialog = new ProgressDialog(InfoKetersediaanBahan.this);
+        private ProgressDialog Dialog = new ProgressDialog(DetailPenggunaanBahanBaku.this);
         int status,jumlah,pembelian;
 
         protected void onPreExecute() {
@@ -89,7 +76,7 @@ public class InfoKetersediaanBahan extends AppCompatActivity{
 
             // Server url call by GET method
 
-            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/infobahan.php");
+            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/detailpenggunaanbahanbaku.php?id="+id_pengrajin);
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
             try {
 
@@ -103,21 +90,18 @@ public class InfoKetersediaanBahan extends AppCompatActivity{
                     Id = new String[data.length()];
                     nama = new String[data.length()];
                     tanggal = new String[data.length()];
+                    Jenis = new String[data.length()];
+                    Jumlah = new String[data.length()];
                     for (int i = 0; i < data.length(); i++) {
                         JSONObject jsonobj = data.getJSONObject(i);
                         //simpan pada database
                         Id[i] = jsonobj.getString("idm_produk");
                         nama[i] = jsonobj.getString("nama_produk");
-                        jumlah = jsonobj.getInt("persediaan");
-                        pembelian = jsonobj.getInt("jumlah");
-                        int ketersediaan = jumlah-pembelian;
-                        if(ketersediaan<=0){
-                            tanggal[i] ="Habis";
-                        }else{
-                            tanggal[i] = "Tersedia";
-                        }
+                        tanggal[i] = jsonobj.getString("tanggal");
+                        Jenis[i] = jsonobj.getString("spesifikasi");
+                        Jumlah[i] = jsonobj.getString("jumlah");
 
-                        Log.i("Data", nama[i] + " " + tanggal[i] + " " + Id[i]+" "+ketersediaan);
+                        Log.i("Data", nama[i] + " " + tanggal[i] + " " + Id[i]+" ");
 
                     }
                 }
@@ -135,15 +119,16 @@ public class InfoKetersediaanBahan extends AppCompatActivity{
 
             // Close progress dialog
             if(status>0) {
-                ckb = new CustomListKetersediaanBahan(InfoKetersediaanBahan.this, Id, nama, tanggal);
-                lv.setAdapter(ckb);
+                cpbk = new CustomListPenggunaanBahanBaku(DetailPenggunaanBahanBaku.this, Id, nama, Jenis,tanggal,Jumlah);
+                lv.setAdapter(cpbk);
             }
             else{
-                Toast.makeText(InfoKetersediaanBahan.this, "Data Kosong", Toast.LENGTH_LONG).show();
+                Toast.makeText(DetailPenggunaanBahanBaku.this, "Data Kosong", Toast.LENGTH_LONG).show();
             }
             Dialog.dismiss();
 
         }
 
     }
+
 }

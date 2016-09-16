@@ -45,7 +45,7 @@ public class Login extends Activity {
         password = (EditText) findViewById(R.id.password);
         Log.e("pref", pref.getString("username", "kosong"));
         if (pref.contains("username")) {
-            if(pref.getString("role","Admin").equals("Admin")) {
+            if(pref.getString("role","Admin").equals("admin")) {
                 Intent intent = new Intent(Login.this, MainActivity.class);
                 startActivity(intent);
             }
@@ -120,7 +120,7 @@ public class Login extends Activity {
                     useroid =role;
                     Log.i("Data", id_pengguna + " " + nama + " " + alamat);
                     adapter.daftar(database, id_pengguna, nama, alamat, username, pass, email, nohp, keterangan, role);
-                    if(role.equals("Admin")) {
+                    if(role.equals("admin")) {
                         Barang();
                         Intent intent = new Intent(Login.this, MainActivity.class);
                         startActivity(intent);
