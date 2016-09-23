@@ -40,10 +40,6 @@
                 android:icon="@drawable/buy"
                 android:title="Pembelian bahan" />
             <item
-                android:id="@+id/nav_send"
-                android:icon="@drawable/trafic"
-                android:title="Penerimaan Bahan Baku" />
-            <item
                 android:id="@+id/guna_bahan"
                 android:icon="@drawable/usage"
                 android:title="Penggunaan Bahan Baku" />

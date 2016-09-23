@@ -41,6 +41,7 @@ public class InfoDataPenyelesaian extends AppCompatActivity {
     private String jenis[];
     private String status[];
     CustomListInfoPesanan custom;
+    String idPengguna;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,6 +52,7 @@ public class InfoDataPenyelesaian extends AppCompatActivity {
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);
+        idPengguna = getIntent().getExtras().getString("idpengguna");
         lv = (ListView) findViewById(R.id.listView);
         btnback = (Button) findViewById(R.id.back);
         btnAmbilData = (Button) findViewById(R.id.getdata);
@@ -140,7 +142,7 @@ public class InfoDataPenyelesaian extends AppCompatActivity {
 
             // Server url call by GET method
 
-            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/data_spk.php");
+            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/infopenyelesaian.php?id="+idPengguna);
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
             try {
 

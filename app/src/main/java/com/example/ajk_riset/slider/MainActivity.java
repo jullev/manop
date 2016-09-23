@@ -117,8 +117,6 @@ public class MainActivity extends AppCompatActivity
         } else if (id == R.id.nav_share) {
             Intent intent = new Intent(this,PembeliaanBahan.class);
             startActivity(intent);
-        } else if (id == R.id.nav_send) {
-
         }else if (id == R.id.hasil) {
             Intent intent = new Intent(this,HasilProduksi.class);
             startActivity(intent);

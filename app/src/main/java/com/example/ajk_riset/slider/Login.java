@@ -106,6 +106,7 @@ public class Login extends Activity {
                     editor.putString("username", jsonobj.getString("pengguna"));
                     editor.putString("email", jsonobj.getString("email"));
                     editor.putString("role", jsonobj.getString("jenis_pengguna"));
+                    editor.putString("id", jsonobj.getString("idm_pengguna"));
                     editor.commit();
                     //simpan pada database
                     String id_pengguna = jsonobj.getString("idm_pengguna");

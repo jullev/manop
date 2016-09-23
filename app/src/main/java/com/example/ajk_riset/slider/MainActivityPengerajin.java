@@ -111,16 +111,10 @@ public class MainActivityPengerajin extends AppCompatActivity
             startActivity(intent);
 
         } else if (id == R.id.info_bahan) {
+            Intent intent = new Intent(this,InfoKetersediaanBahan.class);
+            startActivity(intent);
 
-        } else if (id == R.id.guna_bahan) {
-
-        } else if (id == R.id.nav_share) {
-
-        } else if (id == R.id.nav_send) {
-
-        }else if (id == R.id.hasil) {
-
-        }else if (id == R.id.m_pengguna) {
+        } else if (id == R.id.m_pengguna) {
             Intent intent = new Intent(this,MasterPengguna.class);
             startActivity(intent);
         }
@@ -129,7 +123,7 @@ public class MainActivityPengerajin extends AppCompatActivity
             startActivity(intent);
         }
         else if (id == R.id.spk) {
-            Intent intent = new Intent(this,SuratPerintahKerja.class);
+            Intent intent = new Intent(this,InfoSPK.class);
             startActivity(intent);
         }
 

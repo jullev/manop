@@ -56,6 +56,7 @@
         <activity android:name=".InfoKetersediaanBahan" android:screenOrientation="portrait"></activity>
         <activity android:name=".PenggunaanBahanBaku" android:screenOrientation="portrait"></activity>
         <activity android:name=".DetailPenggunaanBahanBaku" android:screenOrientation="portrait"></activity>
+        <activity android:name=".InfoSPK" android:screenOrientation="portrait"></activity>
     </application>
     <uses-permission android:name="android.permission.INTERNET"/>
 </manifest>
