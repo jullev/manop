@@ -63,6 +63,7 @@ public class MasterProduk  extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MasterProduk.this,DetailProduk.class);
+//                Intent intent = new Intent(MasterProduk.this,TestUploadImage.class);
                 Bundle mBundle = new Bundle();
                 mBundle.putString("idbarang", "0");
                 intent.putExtras(mBundle);
