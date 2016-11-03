@@ -91,7 +91,7 @@ public class Login extends Activity {
 
             // Server url call by GET method
 
-            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/login.php?username=" + uname + "&password=" + pass);
+            JSONObject json = JSONFunction.getJSONfromURL("http://agarwood.web.id/login.php?username=" + uname + "&password=" + pass);
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
             try {
 
@@ -168,7 +168,7 @@ public class Login extends Activity {
         String itemoid, nama, type, harga;
         JSONObject json = JSONFunction
 //				.getJSONfromURL("http://koento-agency.co.id/demo/appsani/json/barang.php");
-                .getJSONfromURL("http://plnbima.esy.es/manop/barang.php");
+                .getJSONfromURL("http://agarwood.web.id/barang.php");
 //    	.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/barang.php");
         try {
 

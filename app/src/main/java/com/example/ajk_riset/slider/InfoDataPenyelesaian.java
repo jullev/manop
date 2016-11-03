@@ -142,7 +142,7 @@ public class InfoDataPenyelesaian extends AppCompatActivity {
 
             // Server url call by GET method
 
-            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/infopenyelesaian.php?id="+idPengguna);
+            JSONObject json = JSONFunction.getJSONfromURL("http://agarwood.web.id/infopenyelesaian.php?id="+idPengguna);
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
             try {
 

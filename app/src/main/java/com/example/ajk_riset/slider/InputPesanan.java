@@ -182,7 +182,7 @@ public class InputPesanan extends AppCompatActivity {
     //insertdata
     public class InsertPesanan extends AsyncTask<String, Void, Void> {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://10.10.1.8/manop/insert_pesanan.php");
+        HttpPost httppost = new HttpPost("http://agarwood.web.id/insert_pesanan.php");
         //		HttpPost httppost = new HttpPost("http://192.168.137.1/AppsaniApp_new/update.php");
         private ProgressDialog Dialog = new ProgressDialog(InputPesanan.this);
         String jumlah, status, useroid;

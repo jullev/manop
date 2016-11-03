@@ -244,7 +244,7 @@ public class SuratPerintahKerja extends AppCompatActivity {
     //insertdata
     public class InsertSPK extends AsyncTask<String, Void, Void> {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://plnbima.esy.es/manop/insert_spk.php");
+        HttpPost httppost = new HttpPost("http://agarwood.web.id/insert_spk.php");
         //		HttpPost httppost = new HttpPost("http://192.168.137.1/AppsaniApp_new/update.php");
         private ProgressDialog Dialog = new ProgressDialog(SuratPerintahKerja.this);
 

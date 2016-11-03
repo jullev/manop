@@ -99,7 +99,7 @@ public class PembeliaanBahan extends AppCompatActivity {
 
             // Server url call by GET method
 
-            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/pembelianproduk.php?id=0");
+            JSONObject json = JSONFunction.getJSONfromURL("http://agarwood.web.id/pembelianproduk.php?id=0");
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
             try {
 

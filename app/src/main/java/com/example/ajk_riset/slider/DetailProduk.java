@@ -1,17 +1,24 @@
 package com.example.ajk_riset.slider;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Base64;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
@@ -22,6 +29,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -44,8 +52,13 @@ public class DetailProduk extends AppCompatActivity {
     Cursor kursor;
     public EditText IdProduk, Namaproduk, spesifikasi, Foto, Persediaan, hargasatuan, hargagrosir;
     Spinner kategori;
-    Button submit;
+    Button submit,cariGambar;
+    String imgPath, fileName;
+    private int PICK_IMAGE_REQUEST = 1;
     public String idbarang;
+    private Bitmap bitmap;
+    private ImageView imageView;
+    public static String encodedString;
     public static String idProduk, NamaProduk, Kategori, Spesifikasi, foto, persediaan, hargaSatuan, Satuan, hargaGrosir, input;
 
     @Override
@@ -62,6 +75,8 @@ public class DetailProduk extends AppCompatActivity {
         hargagrosir = (EditText) findViewById(R.id.editText8);
         kategori = (Spinner) findViewById(R.id.kategori);
         submit = (Button) findViewById(R.id.button8);
+        cariGambar = (Button) findViewById(R.id.button9);
+        imageView = (ImageView) findViewById(R.id.imageView4);
         adapter = new DBAdapter(DetailProduk.this);
         database = adapter.getWritableDatabase();
         addItemsOnSpinner();
@@ -84,7 +99,7 @@ public class DetailProduk extends AppCompatActivity {
                     NamaProduk = Namaproduk.getText().toString();
                     Kategori = kategori.getSelectedItem().toString();
                     Spesifikasi = spesifikasi.getText().toString();
-                    foto = Foto.getText().toString();
+//                    foto = Foto.getText().toString();
                     persediaan = Persediaan.getText().toString();
                     hargaSatuan = hargasatuan.getText().toString();
                     hargaGrosir = hargagrosir.getText().toString();
@@ -96,7 +111,7 @@ public class DetailProduk extends AppCompatActivity {
                     NamaProduk = Namaproduk.getText().toString();
                     Kategori = kategori.getSelectedItem().toString();
                     Spesifikasi = spesifikasi.getText().toString();
-                    foto = Foto.getText().toString();
+//                    foto = Foto.getText().toString();
                     persediaan = Persediaan.getText().toString();
                     hargaSatuan = hargasatuan.getText().toString();
                     hargaGrosir = hargagrosir.getText().toString();
@@ -104,6 +119,83 @@ public class DetailProduk extends AppCompatActivity {
                 }
             }
         });
+        cariGambar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showFileChooser();
+            }
+        });
+    }
+    private void showFileChooser() {
+        Intent intent = new Intent();
+        intent.setType("image/*");
+        intent.setAction(Intent.ACTION_GET_CONTENT);
+        startActivityForResult(Intent.createChooser(intent, "Select Picture"), PICK_IMAGE_REQUEST);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK && data != null && data.getData() != null) {
+            Uri filePath = data.getData();
+            String[] filePathColumn = { MediaStore.Images.Media.DATA };
+            try {
+                //Getting the Bitmap from Gallery
+                bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                //Setting the Bitmap to ImageView
+                imageView.setImageBitmap(bitmap);
+                String[] proj = { MediaStore.Images.Media.DATA};
+                Cursor cursor = DetailProduk.this.getContentResolver().query(filePath, proj, null, null, null);
+                int column_index = cursor.getColumnIndexOrThrow(MediaStore.Images.Media.DATA);
+                cursor.moveToFirst();
+                imgPath = cursor.getString(column_index);
+
+                Log.e("filename",imgPath);
+                cursor.close();
+//                encodeImagetoString();
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+    //encode image string base64
+    public void encodeImagetoString() {
+        final ProgressDialog[] prgDialog = new ProgressDialog[1];
+        new AsyncTask<Void, Void, String>() {
+
+            protected void onPreExecute() {
+                prgDialog[0] = new ProgressDialog(DetailProduk.this);
+                // Set Cancelable as False
+                prgDialog[0].setCancelable(false);
+
+            };
+
+            @Override
+            protected String doInBackground(Void... params) {
+                BitmapFactory.Options options = null;
+                options = new BitmapFactory.Options();
+                options.inSampleSize = 3;
+                Log.e("image",imgPath);
+                bitmap = BitmapFactory.decodeFile(imgPath,
+                        options);
+                ByteArrayOutputStream stream = new ByteArrayOutputStream();
+                // Must compress the Image to reduce image size to make upload easy
+                bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+                byte[] byte_arr = stream.toByteArray();
+                // Encode Image to String
+                encodedString = Base64.encodeToString(byte_arr, 0);
+                return "";
+            }
+
+            @Override
+            protected void onPostExecute(String msg) {
+                prgDialog[0].setMessage("Calling Upload");
+                // Put converted Image string into Async Http Post param
+//                params.put("image", encodedString);
+            }
+        }.execute(null, null, null);
     }
     //additemonspinner
     public void addItemsOnSpinner() {
@@ -128,11 +220,26 @@ public class DetailProduk extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
+    public String getStringImage(){
+        String encodedString;
+        BitmapFactory.Options options = null;
+        options = new BitmapFactory.Options();
+        options.inSampleSize = 3;
+        bitmap = BitmapFactory.decodeFile(imgPath,
+                options);
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        // Must compress the Image to reduce image size to make upload easy
+        bitmap.compress(Bitmap.CompressFormat.PNG, 50, stream);
+        byte[] byte_arr = stream.toByteArray();
+        // Encode Image to String
+        encodedString = Base64.encodeToString(byte_arr, 0);
+        return encodedString;
+    }
 
     //insertdata
     public class InsertPengguna extends AsyncTask<String, Void, Void> {
         HttpClient httpclient = new DefaultHttpClient();
-        HttpPost httppost = new HttpPost("http://plnbima.esy.es/manop/manajemenproduk.php");
+        HttpPost httppost = new HttpPost("http://agarwood.web.id/manajemenproduk.php");
         //        HttpPost httppost = new HttpPost("http://10.208.69.236/manop/manajemenpengguna.php");
         private ProgressDialog Dialog = new ProgressDialog(DetailProduk.this);
 
@@ -152,13 +259,14 @@ public class DetailProduk extends AppCompatActivity {
                 // Add your data
                 List<NameValuePair> nameValuePairs = new ArrayList<NameValuePair>(
                         8);
-
+//                String image = getStringImage();
+                Log.i("foto",encodedString);
                 nameValuePairs.add(new BasicNameValuePair("input", input));
                 nameValuePairs.add(new BasicNameValuePair("id", idProduk));
                 nameValuePairs.add(new BasicNameValuePair("nama_produk", NamaProduk));
                 nameValuePairs.add(new BasicNameValuePair("kategori", Kategori));
                 nameValuePairs.add(new BasicNameValuePair("spesifikasi", Spesifikasi));
-                nameValuePairs.add(new BasicNameValuePair("foto", foto));
+                nameValuePairs.add(new BasicNameValuePair("foto", encodedString));
                 // nameValuePairs.add(new BasicNameValuePair("user",
                 // "jullev"));
                 nameValuePairs.add(new BasicNameValuePair("persediaan",
@@ -173,6 +281,7 @@ public class DetailProduk extends AppCompatActivity {
                         + response.getStatusLine().getReasonPhrase());
 
 
+
             } catch (ClientProtocolException e) {
 
                 // TODO Auto-generated catch block
@@ -184,6 +293,8 @@ public class DetailProduk extends AppCompatActivity {
 
             return null;
         }
+
+
 
         protected void onPostExecute(Void unused) {
             // NOTE: You can call UI Element here.
@@ -219,7 +330,7 @@ public class DetailProduk extends AppCompatActivity {
 
             // Server url call by GET method
 
-            JSONObject json = JSONFunction.getJSONfromURL("http://plnbima.esy.es/manop/cariproduk.php?id=" + idbarang);
+            JSONObject json = JSONFunction.getJSONfromURL("http://agarwood.web.id/cariproduk.php?id=" + idbarang);
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
             try {
 
@@ -232,7 +343,7 @@ public class DetailProduk extends AppCompatActivity {
                     idm_produk = jsonobj.getString("idm_produk");
                     nama_produk = jsonobj.getString("nama_produk");
                     Spek = jsonobj.getString("spesifikasi");
-                    foto = jsonobj.getString("foto");
+//                    foto = jsonobj.getString("foto");
                     persediaan = jsonobj.getString("persediaan");
                     harga_satuan = jsonobj.getString("harga_satuan");
                     harga_grosir = jsonobj.getString("harga_grosir");
@@ -257,7 +368,7 @@ public class DetailProduk extends AppCompatActivity {
             IdProduk.setText(idm_produk);
             Namaproduk.setText(nama_produk);
             spesifikasi.setText(Spek);
-            Foto.setText(foto);
+//            Foto.setText(foto);
             Persediaan.setText(persediaan);
             hargagrosir.setText(harga_grosir);
             hargasatuan.setText(harga_satuan);

@@ -74,7 +74,7 @@ public class DetailHasilProduksi extends AppCompatActivity {
             // NOTE: Don't call UI Element here.
 
             // Server url call by GET method
-            String url = "http://plnbima.esy.es/manop/detailhasilproduksi.php?id=" + idPengguna;
+            String url = "http://agarwood.web.id/detailhasilproduksi.php?id=" + idPengguna;
             Log.e("url", url);
             JSONObject json = JSONFunction.getJSONfromURL(url);
 //            	JSONObject json = JSONFunctions.getJSONfromURL("http://192.168.137.1/AppsaniApp_new/login.php?username="+uname+"&password="+pass);
